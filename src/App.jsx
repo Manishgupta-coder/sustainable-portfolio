@@ -14,7 +14,7 @@ import HeroManagement from "./Admin/components/HeroManagement";
 import ClientManagement from "./Admin/components/ClientManagement";
 import ContactSection from "./Admin/components/ContactSectionUnified";
 import { supabase } from "./supabase/supabase";
-// import AboutUsManagement from "./Admin/components/AboutUsManagement";
+import AboutUsManagement from "./Admin/components/AboutUsManagement";
 
 const App = () => {
   return (
@@ -27,13 +27,12 @@ const App = () => {
         <Route element={<ProtectedRoute/>}>
           <Route path="/dashboard" element={<AdminDashboard/>}>
             <Route index element={<MainContent/>}/>
-            <Route path="customerQueries" element={<CustomerQueries/>}/>
             <Route path="projects" element={<ProjectManagement/>}/>
             <Route path="settings" element={<AdminSettingsPage/>}/>
             <Route path="heroSection" element={<HeroManagement/>}/>
             <Route path="clients" element={<ClientManagement/>}/>
             <Route path="contactSection" element={<ContactSection/>}/>
-            {/* <Route path="aboutUs" element={<AboutUsManagement/>}/> */}
+            <Route path="aboutUs" element={<AboutUsManagement/>}/>
           </Route>
         </Route>
       </Routes>

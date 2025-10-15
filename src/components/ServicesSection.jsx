@@ -1,18 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { 
-  Leaf, Droplets, FileCheck, Map, TrendingUp, Wind,
-  ChevronDown, Mail, Phone, MapPin, Send, Users,
-  Target, Award, Building, Recycle, CheckCircle
+  Recycle, FileCheck, Users, Leaf, Wind, Map 
 } from 'lucide-react';
+
 function ServicesSection() {
-   const services = [
-    { icon: Recycle, title: 'Solid Waste Management', desc: 'Comprehensive waste management solutions from collection to disposal, including recycling and waste-to-energy strategies.' },
-    { icon: Droplets, title: 'Wastewater Management', desc: 'Advanced wastewater treatment systems and water quality monitoring for sustainable water resource management.' },
-    { icon: FileCheck, title: 'Environmental Impact Assessment', desc: 'Thorough EIA studies ensuring compliance with environmental regulations and sustainable project development.' },
-    { icon: Map, title: 'GIS-Based Monitoring', desc: 'Cutting-edge geographic information systems for real-time environmental monitoring and spatial analysis.' },
-    { icon: TrendingUp, title: 'Sustainability Advisory', desc: 'Strategic guidance on sustainable practices, green certifications, and ESG compliance for organizations.' },
-    { icon: Wind, title: 'Climate Change Mitigation', desc: 'Innovative solutions for carbon footprint reduction and climate resilience strategies.' }
+  const services = [
+    {
+      icon: Recycle,
+      title: 'Waste Management',
+      desc: [
+        'Comprehensive solutions for Solid, Plastic, Legacy, Biomedical, and E-waste Management.',
+        'Design and implementation of Integrated Waste Management Systems — including door-to-door collection, segregation, treatment, and scientific disposal.',
+        'Circular Economy interventions, EPR advisory, bioremediation, and landfill reclamation for sustainable urban systems.'
+      ]
+    },
+    {
+      icon: FileCheck,
+      title: 'Environmental Sustainability',
+      desc: [
+        'EIA, EMP, and Environmental Audits for industries, infrastructure, and development projects.',
+        'Sustainability and ESG Strategy, including SDG alignment, BRSR, and GRI reporting.',
+        'Resource efficiency, pollution prevention, and green certification support (LEED, GRIHA, ISO 14001).'
+      ]
+    },
+    {
+      icon: Users,
+      title: 'Social Development & Socio-Economic Studies',
+      desc: [
+        'Socio-economic and baseline assessments for planning, policy, and project evaluation.',
+        'Awareness and behavior change campaigns for ULBs, industries, and communities.',
+        'Community engagement, inclusion of informal sector workers, and CSR-driven livelihood initiatives.'
+      ]
+    },
+    {
+      icon: Leaf,
+      title: 'Natural Resource Management',
+      desc: [
+        'Afforestation, watershed management, and rainwater harvesting for ecological restoration.',
+        'Biodiversity conservation, land reclamation, and sustainable agriculture promotion.',
+        'Participatory resource governance and ecosystem valuation to enhance local resilience.'
+      ]
+    },
+    {
+      icon: Wind,
+      title: 'Climate Change Mitigation & Adaptation',
+      desc: [
+        'Carbon footprinting, GHG inventories, and MRV systems for policy and project-level implementation.',
+        'Climate resilience and disaster risk reduction planning for governments and businesses.',
+        'Renewable energy advisory and development of Net Zero and low-carbon transition strategies.'
+      ]
+    },
+    {
+      icon: Map,
+      title: 'GIS Mapping & Real-Time Data Dashboards',
+      desc: [
+        'Development of GIS-based mapping and visualization tools for environmental and social datasets.',
+        'Spatial planning and monitoring of waste, resource, and community infrastructure.',
+        'Real-time dashboards and decision-support systems for evidence-based management and reporting.'
+      ]
+    }
   ];
 
   const ref = React.useRef(null);
@@ -47,7 +94,11 @@ function ServicesSection() {
             >
               <service.icon className="w-14 h-14 text-green-500 mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{service.desc}</p>
+              <ul className="list-disc pl-5 text-gray-600 space-y-2">
+                {service.desc.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
             </motion.div>
           ))}
         </div>
@@ -56,4 +107,4 @@ function ServicesSection() {
   );
 }
 
-export default ServicesSection
+export default ServicesSection;

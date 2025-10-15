@@ -13,10 +13,9 @@ function Sidebar() {
     const navigate = useNavigate()
     const menuItems = [
     { id: 'overview', icon: Home, label: 'Overview',url: "/dashboard"},
-    { id: 'Queries', icon: Users, label: 'Queries',url: "customerQueries" },
-    { id: 'Projects', icon: FileText, label: 'Projects',url:"projects" },
     { id: 'heroSection', icon: TrendingUp, label: 'Hero Section',url:"heroSection" },
-    { id: 'aboutUs', icon: Settings, label: 'About Us',url:"#" },
+    { id: 'aboutUs', icon: Settings, label: 'About Us',url:"aboutUs" },
+    { id: 'Projects', icon: FileText, label: 'Projects',url:"projects" },
     { id: 'clients', icon: Settings, label: 'Clients',url:"clients" },
     { id: 'contactSection', icon: Users, label: 'Contact Section',url:"contactSection" },
     { id: 'settings', icon: Settings, label: 'Settings',url:"settings" },
