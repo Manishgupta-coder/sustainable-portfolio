@@ -9,6 +9,7 @@ import logo from "../assets/images/logo.png";
 
 
 function Navigation() {
+  
     const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -33,7 +34,7 @@ function Navigation() {
           </span>
           {/* <img src={logo} alt="logo" /> */}
         </div>
-        <div className="hidden md:flex space-x-8">
+        {/* <div className="hidden md:flex space-x-8">
           {['About', 'Services', 'Projects', 'Impact', 'Contact'].map((item) => (
             <a 
               key={item}
@@ -43,7 +44,7 @@ function Navigation() {
               {item}
             </a>
           ))}
-        </div>
+        </div> */}
       </div>
     </motion.nav>
   );

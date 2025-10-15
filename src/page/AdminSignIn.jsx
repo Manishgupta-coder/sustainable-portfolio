@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { supabase } from "../supabase/supabase";
+import { Link, useNavigate } from "react-router-dom";
 
 function AdminSignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,11 +25,10 @@ function AdminSignIn() {
         setLoading(false)
     }
     else{
+        navigate('/dashboard')
         console.log(data);
         setLoading(false)
     }
-    // Add backend login logic here (e.g., Supabase auth)
-    // setTimeout(() => setLoading(false), 1500);
   };
 
 
@@ -39,7 +40,6 @@ function AdminSignIn() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 sm:p-10"
       >
-        {/* Logo + Title */}
         <div className="text-center mb-8">
           <motion.div
             initial={{ scale: 0 }}
@@ -92,6 +92,14 @@ function AdminSignIn() {
               />
             </div>
           </div>
+          <div className="flex justify-end mt-2 mb-5">
+      <Link
+        to="/forgot-password"
+        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+      >
+        Forgot Password?
+      </Link>
+    </div>
 
           <motion.button
             whileHover={{ scale: 1.03 }}

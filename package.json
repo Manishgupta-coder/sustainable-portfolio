@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Manishgupta-coder.github.io/sustainable-portfolio",
+  "homepage": "https://Manishgupta-coder.github.io/sustainable-portfolio/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,11 +13,22 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.75.0",
     "@tailwindcss/vite": "^4.1.14",
+    "@tiptap/core": "^3.7.0",
+    "@tiptap/extension-color": "^3.7.0",
+    "@tiptap/extension-highlight": "^3.7.0",
+    "@tiptap/extension-image": "^3.7.0",
+    "@tiptap/extension-text-align": "^3.7.0",
+    "@tiptap/extension-text-style": "^3.7.0",
+    "@tiptap/extension-underline": "^3.7.0",
+    "@tiptap/react": "^3.7.0",
+    "@tiptap/starter-kit": "^3.7.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^7.9.4",
     "tailwindcss": "^4.1.14"
   },

@@ -1,113 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { supabase } from '../supabase/supabase';
 
 function HeroSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [hero, setHero] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const slides = [
-    {
-      image: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=1920&h=1080&fit=crop',
-      title: 'Driving Sustainable Solutions',
-      subtitle: 'for a Greener Future',
-      description: 'Delivering data-driven environmental consultancy for urban ecosystems.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1920&h=1080&fit=crop',
-      title: 'Environmental Impact Assessment',
-      subtitle: 'with Precision & Care',
-      description: 'Comprehensive analysis for sustainable industrial development.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=1920&h=1080&fit=crop',
-      title: "Building Tomorrow's Ecosystem",
-      subtitle: 'Today',
-      description: 'Innovative strategies for environmental conservation and restoration.'
-    }
-  ];
-
-  // Auto slide every 5 seconds
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+    fetchHero();
+  }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const fetchHero = async () => {
+    const { data, error } = await supabase.from('hero_section').select('*').limit(1).single();
+    if (!error && data) setHero(data);
+    setLoading(false);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-600">
+        Loading...
+      </section>
+    );
+  }
+
+  if (!hero) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-600">
+        No hero data found
+      </section>
+    );
+  }
 
   return (
-    <section className="relative min-h-screen overflow-hidden flex items-center justify-center">
-      {/* Slides Container */}
-      <div className="relative w-full h-screen overflow-hidden">
-        <motion.div
-          className="flex w-full h-full"
-          animate={{ x: `-${currentSlide * 100}%` }}
-          transition={{ type: 'tween', ease: 'easeInOut', duration: 0.8 }}
-        >
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className="w-full flex-shrink-0 h-screen relative flex items-center justify-center"
-              style={{
-                backgroundImage: `url(${slide.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-              }}
-            >
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-green-900/60 to-blue-900/70"></div>
-
-              {/* Slide content */}
-              <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 text-white max-w-3xl">
-                <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                  {slide.title} <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-300">
-                    {slide.subtitle}
-                  </span>
-                </h1>
-                <p className="text-lg md:text-xl">{slide.description}</p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-10 flex justify-center w-full gap-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Navigation Arrows */}
-      {/* <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all"
-        aria-label="Previous slide"
+    <section
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${hero.image_url})` }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-green-900/60 to-blue-900/70"></div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 text-center px-4 sm:px-6 lg:px-8 text-white max-w-3xl"
       >
-        <ChevronLeft className="w-6 h-6 text-white" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-6 h-6 text-white" />
-      </button> */}
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          {hero.title} <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-300">
+            {hero.subtitle}
+          </span>
+        </h1>
+        <p className="text-lg md:text-xl">{hero.description}</p>
+      </motion.div>
     </section>
   );
 }
