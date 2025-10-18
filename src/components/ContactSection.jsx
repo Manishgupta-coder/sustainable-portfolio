@@ -118,7 +118,7 @@ function ContactSection() {
                   {info.icon}
                 </motion.div>
                 <h4 className="text-2xl font-semibold">{info.title}</h4>
-                <p className="text-green-300 text-lg font-medium">{info.detail}</p>
+                <p className="text-green-300 text-sm sm:text-lg  font-medium">{info.detail}</p>
                 <p className="text-blue-100 text-sm">{info.description}</p>
               </div>
             </motion.div>
