@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../supabase/supabase";
-import { Save, Loader2, AlertCircle, CheckCircle, Info } from "lucide-react";
+import { Save, Loader2, CheckCircle, AlertCircle, Info } from "lucide-react";
 
 export default function AboutUsManagement() {
   const [loading, setLoading] = useState(false);
@@ -19,10 +19,8 @@ export default function AboutUsManagement() {
     const { data, error } = await supabase.from("about_us").select("*").single();
 
     if (error) {
-      if (error.code === "PGRST116") {
-        console.log("No about us data found");
-      } else {
-        console.error(error);
+      console.error(error);
+      if (error.code !== "PGRST116") {
         setMessage({ type: "error", text: "Failed to fetch data" });
       }
     } else {
@@ -30,6 +28,7 @@ export default function AboutUsManagement() {
       setDescription(data.description || "");
       setAboutId(data.id);
     }
+
     setLoading(false);
   };
 
@@ -49,21 +48,19 @@ export default function AboutUsManagement() {
       updated_at: new Date().toISOString(),
     };
 
+    let result;
     if (aboutId) {
-      const { error } = await supabase.from("about_us").update(aboutData).eq("id", aboutId);
-      if (error) {
-        setMessage({ type: "error", text: "Failed to update About Us section" });
-      } else {
-        setMessage({ type: "success", text: "About Us updated successfully!" });
-      }
+      result = await supabase.from("about_us").update(aboutData).eq("id", aboutId);
     } else {
-      const { data, error } = await supabase.from("about_us").insert([aboutData]).select().single();
-      if (error) {
-        setMessage({ type: "error", text: "Failed to create About Us section" });
-      } else {
-        setAboutId(data.id);
-        setMessage({ type: "success", text: "About Us created successfully!" });
-      }
+      result = await supabase.from("about_us").insert([aboutData]).select().single();
+    }
+
+    const { error } = result;
+    if (error) {
+      setMessage({ type: "error", text: "Failed to save About Us data" });
+    } else {
+      if (!aboutId && result.data) setAboutId(result.data.id);
+      setMessage({ type: "success", text: "About Us saved successfully!" });
     }
 
     setSaving(false);
@@ -71,22 +68,21 @@ export default function AboutUsManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 md:p-10">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="bg-white shadow-lg rounded-3xl p-6 md:p-8 mb-8 border border-gray-100 flex justify-between items-center">
+        <div className="bg-white shadow-xl rounded-3xl p-6 md:p-8 flex justify-between items-center border border-gray-100 mb-8">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               About Us Management
             </h1>
-            <p className="text-gray-500">Manage your About Us section content</p>
+            <p className="text-gray-500">Manage your company About Us section</p>
           </div>
           <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg">
             <Info className="w-8 h-8 text-white" />
           </div>
         </div>
 
-        {/* Alert Message */}
+        {/* Alert */}
         {message.text && (
           <div
             className={`mb-6 p-4 rounded-2xl border-2 flex items-start gap-3 ${
@@ -96,9 +92,9 @@ export default function AboutUsManagement() {
             }`}
           >
             {message.type === "success" ? (
-              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle className="w-5 h-5 text-green-600" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-red-600" />
             )}
             <p
               className={`text-sm font-medium ${
@@ -118,15 +114,14 @@ export default function AboutUsManagement() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-lg rounded-3xl p-6 md:p-8 border border-gray-100 space-y-6"
+            className="bg-white rounded-3xl shadow-lg p-6 md:p-8 border border-gray-100 space-y-6"
           >
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Title *
               </label>
               <input
                 type="text"
-                required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., About Our Company"
@@ -135,17 +130,16 @@ export default function AboutUsManagement() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Description *
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Description (Press Enter twice for new paragraph) *
               </label>
               <textarea
-                required
                 rows="8"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Write about your company..."
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-lg resize-none"
-              ></textarea>
+              />
             </div>
 
             <div className="flex justify-end">
@@ -168,17 +162,6 @@ export default function AboutUsManagement() {
               </button>
             </div>
           </form>
-        )}
-
-        {/* Preview */}
-        {title && description && (
-          <div className="mt-8 bg-white shadow-lg rounded-3xl p-6 border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Live Preview</h2>
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">{title}</h3>
-            <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-              {description}
-            </p>
-          </div>
         )}
       </div>
     </div>

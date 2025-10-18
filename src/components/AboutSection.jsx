@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { supabase } from '../supabase/supabase';
-import { Leaf, Target, Users, Award } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { supabase } from "../supabase/supabase";
+import { Leaf, Target, Users, Award } from "lucide-react";
 
 function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
-
-  const [aboutData, setAboutData] = useState({ title: '', description: '' });
+  const [aboutData, setAboutData] = useState({ title: "", description: "" });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAboutUs = async () => {
-      const { data, error } = await supabase.from('about_us').select('*').single();
+      const { data, error } = await supabase.from("about_us").select("*").single();
       if (error) {
-        console.error('Error fetching About Us:', error.message);
+        console.error("Error fetching About Us:", error.message);
       } else if (data) {
         setAboutData({ title: data.title, description: data.description });
       }
@@ -23,19 +22,30 @@ function AboutSection() {
     fetchAboutUs();
   }, []);
 
-  // ✅ Split the title and make the 2nd word green
   const renderColoredTitle = (title) => {
     if (!title) return null;
-    const words = title.split(' ');
+    const words = title.split(" ");
     return (
       <>
         {words.map((word, i) => (
-          <span key={i} className={i === 1 ? 'text-green-500' : 'text-gray-900'}>
-            {word}{' '}
+          <span key={i} className={i === 1 ? "text-green-500" : "text-gray-900"}>
+            {word}{" "}
           </span>
         ))}
       </>
     );
+  };
+
+  // ✅ Convert each paragraph separated by a newline into <p>
+  const renderParagraphs = (text) => {
+    return text
+      .split(/\n\s*\n/) // Split by empty lines
+      .filter(Boolean)
+      .map((para, i) => (
+        <p key={i} className="mb-4 text-lg text-gray-600 leading-relaxed">
+          {para.trim()}
+        </p>
+      ));
   };
 
   return (
@@ -47,7 +57,7 @@ function AboutSection() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* ✅ Left Side */}
+            {/* Left Side */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -55,16 +65,13 @@ function AboutSection() {
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 {renderColoredTitle(
-                  aboutData.title || 'About SustainEco Systems & Services'
+                  aboutData.title || "About SustainEco Systems & Services"
                 )}
               </h2>
-              <p className="text-lg text-gray-600 leading-relaxed whitespace-pre-line">
-                {aboutData.description ||
-                  'SustainEco Systems & Services (S³) is a multidisciplinary environmental consultancy dedicated to delivering sustainable, technology-driven solutions for urban and industrial development challenges.'}
-              </p>
+              <div>{renderParagraphs(aboutData.description)}</div>
             </motion.div>
 
-            {/* ✅ Right Side */}
+            {/* Right Side */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
