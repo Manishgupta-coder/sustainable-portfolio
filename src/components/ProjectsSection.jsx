@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "../supabase/supabase"; 
 
 function ProjectsSection() {
@@ -49,11 +49,14 @@ function ProjectsSection() {
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
   useEffect(() => {
+    if (!isInView) return; // Start auto-slide only when in view
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 5000);
+
     return () => clearInterval(interval);
-  }, [maxIndex]);
+  }, [isInView, maxIndex]);
 
   return (
     <section id="projects" ref={ref} className="py-24 bg-white">
@@ -126,16 +129,10 @@ function ProjectsSection() {
                         className="w-full h-48 object-cover rounded-xl mb-4"
                       />
                     )}
-                    {/* <div className="bg-gradient-to-r from-blue-700 to-green-500 w-16 h-16 rounded-xl flex items-center justify-center mb-4">
-                      <CheckCircle className="w-8 h-8 text-white" />
-                    </div> */}
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{project.title}</h3>
                     <p className="text-gray-600 mb-4 leading-relaxed">
                       {project.description}
                     </p>
-                    {/* <button className="text-blue-700 font-semibold hover:text-green-500 transition-colors">
-                      Learn More →
-                    </button> */}
                   </motion.div>
                 ))}
               </motion.div>

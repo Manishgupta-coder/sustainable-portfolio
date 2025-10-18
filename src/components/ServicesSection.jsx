@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
-import { 
-  Recycle, FileCheck, Users, Leaf, Wind, Map 
+import {
+  Recycle, FileCheck, Users, Leaf, Wind, Map
 } from 'lucide-react';
 
 function ServicesSection() {
@@ -90,7 +90,8 @@ function ServicesSection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border border-gray-100"
+              className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-transform duration-300 cursor-pointer border border-gray-100"
+              style={{ willChange: 'transform' }}
             >
               <service.icon className="w-14 h-14 text-green-500 mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>

@@ -48,13 +48,16 @@ function ClientsSection() {
   const nextSlide = () => setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   const prevSlide = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
 
-  // ✅ Auto slide
+  // ✅ Auto slide only when in view
   useEffect(() => {
+    if (!isInView) return; // Start auto-slide only when in view
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 4000);
+
     return () => clearInterval(interval);
-  }, [maxIndex]);
+  }, [isInView, maxIndex]);
 
   return (
     <section ref={ref} className="py-24 bg-gray-50">
